@@ -17,7 +17,7 @@ export default class TodoList extends Component {
                    {
                        this.state.list.map( (item, index) => {
                            return (
-                                <li key={index}>
+                                <li key={index} onClick={this.handleDelete.bind(this,index)}>
                                      {item}
                                 </li>
                            )
@@ -30,7 +30,7 @@ export default class TodoList extends Component {
     handleClick = () => {
         let list = [...this.state.list, this.state.inputValue];
         this.setState({
-            list: list, // 设置更新数据实现视图更新
+            list, // 设置更新数据实现视图更新
             inputValue: '' // 每次输入完后清空输入框的值
         })
         
@@ -38,6 +38,14 @@ export default class TodoList extends Component {
     handleChange = (e) => {
         this.setState({
             inputValue: e.target.value
+        })
+        
+    }
+    handleDelete = (index) => {
+        let list = [...this.state.list]
+        list.splice(index,1)
+        this.setState({
+            list
         })
         
     }
