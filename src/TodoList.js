@@ -1,5 +1,5 @@
-import React, { Component } from 'react'
-
+import React, { Component, Fragment } from 'react'
+import TodoItem from './TodoItem';
 export default class TodoList extends Component {
     constructor(props) {
         super(props)
@@ -10,21 +10,19 @@ export default class TodoList extends Component {
     }
     render() {
         return (
-            <div>
+            <Fragment>
                 <input value={this.state.inputValue} onChange={this.handleChange}/>
                 <button onClick={this.handleClick}>提交</button>
                 <ul>
                    {
                        this.state.list.map( (item, index) => {
                            return (
-                                <li key={index} onClick={this.handleDelete.bind(this,index)}>
-                                     {item}
-                                </li>
+                             <TodoItem content={item} index={index} handleDelete={this.handleDelete.bind(this)}></TodoItem>
                            )
                        })
                    }
                 </ul>
-            </div>
+            </Fragment>
         )
     }
     handleClick = () => {
