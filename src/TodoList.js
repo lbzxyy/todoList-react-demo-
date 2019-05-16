@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import 'antd/dist/antd.css';
-import { Input,Button,List,Typography } from 'antd';
 import store from './store';
-import { CHANGE_INPUT_VALUE, ADD_TODO_ITEM, DELETE_TODO_ITEM} from './store/actionTypes';
-
+import TodoListUI from './todoListUI';
+import { getInputChangeAction, addTodoListAction, deleteTodoListAction, getInitTodoListAction } from './store/actionCreators';
+import axios from 'axios';
 export default class TodoList extends Component {
   constructor(props) {
     super(props);
@@ -13,55 +13,38 @@ export default class TodoList extends Component {
   }
   render() {
     return (
-      <div>
-        <div>
-            <Input placeholder="input info" 
-            value={this.state.inputValue} 
-            onChange={ this.handleChange }
-            style={{ width: '300px', margin: '10px'}}>
-            </Input>
-            <Button type="primary" onClick={ this.submit }>提交</Button>
-        </div>
-        <List
-            style={{marginTop: '10px', width: '300px'}}
-            bordered
-            dataSource={this.state.list}
-            renderItem={(item,index) => (
-                <List.Item onClick={ this.handleDelete.bind(this,index) }>
-                <Typography.Text mark>[ITEM]</Typography.Text> {item}
-                </List.Item>
-            )}
-            />
-      </div>
+      <TodoListUI
+        inputValue={ this.state.inputValue }
+        list={ this.state.list }
+        handleChange = { this.handleChange }
+        submit = { this.submit }
+        handleDelete = { this.handleDelete }
+      ></TodoListUI>
     )
   }
+  componentDidMount() {
+    axios.get('https://www.easy-mock.com/mock/5cc1d338a292711d4b98d708/example/api/todolist').then((res)=>{
+        console.log('====================================');
+        console.log(res);
+        console.log('====================================');
+        const action = getInitTodoListAction(res.data)
+        store.dispatch(action)
+    })
+  }
+
   handleChange(e) {
-    console.log('====================================');
-    console.log(e.target.value);
-    console.log('====================================');
-    const action = {
-      type: CHANGE_INPUT_VALUE,
-      value: e.target.value
-    }
+    const action = getInputChangeAction(e.target.value)
     store.dispatch(action)
   }
   submit =() => {
-    const action = {
-      type: ADD_TODO_ITEM
-    }
+    const action = addTodoListAction()
     store.dispatch(action)
   }
   handleDelete = (index) => {
-    const action = {
-      type: DELETE_TODO_ITEM,
-      index: index
-    }
+    const action = deleteTodoListAction(index)
     store.dispatch(action)
   }
   handleStoreChange =() => {
-    console.log('====================================');
-    console.log('store change');
-    console.log('====================================');
     this.setState(store.getState())
   }
 }
