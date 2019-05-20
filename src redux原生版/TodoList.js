@@ -2,9 +2,8 @@ import React, { Component } from 'react';
 import 'antd/dist/antd.css';
 import store from './store';
 import TodoListUI from './todoListUI';
-import { getInputChangeAction, addTodoListAction, deleteTodoListAction,
-  getTodoList
-} from './store/actionCreators';
+import { getInputChangeAction, addTodoListAction, deleteTodoListAction, getInitTodoListAction } from './store/actionCreators';
+import axios from 'axios';
 export default class TodoList extends Component {
   constructor(props) {
     super(props);
@@ -24,8 +23,13 @@ export default class TodoList extends Component {
     )
   }
   componentDidMount() {
-    const action = getTodoList()
-    store.dispatch(action)
+    axios.get('https://www.easy-mock.com/mock/5cc1d338a292711d4b98d708/example/api/todolist').then((res)=>{
+        console.log('====================================');
+        console.log(res);
+        console.log('====================================');
+        const action = getInitTodoListAction(res.data)
+        store.dispatch(action)
+    })
   }
 
   handleChange(e) {
