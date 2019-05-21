@@ -1,15 +1,14 @@
 import React, { Component } from 'react';
 import 'antd/dist/antd.css';
 import store from './store';
+
 import TodoListUI from './todoListUI';
-import { getInputChangeAction, addTodoListAction, deleteTodoListAction,
-  getTodoList
-} from './store/actionCreators';
+import { getInputChangeAction, addTodoListAction, deleteTodoListAction
+  ,getInitListAction} from './store/actionCreators';
 export default class TodoList extends Component {
   constructor(props) {
     super(props);
     this.state = store.getState()
-    console.log(this.state)
     store.subscribe(this.handleStoreChange)
   }
   render() {
@@ -24,8 +23,10 @@ export default class TodoList extends Component {
     )
   }
   componentDidMount() {
-    const action = getTodoList()
-    store.dispatch(action)
+    const action = getInitListAction()
+      store.dispatch(action)
+   
+
   }
 
   handleChange(e) {

@@ -4,9 +4,6 @@ const defaultState = {
     list: []
 }
 export default ( state = defaultState, action ) => {
-    console.log('====================================');
-    console.log(state,action);
-    console.log('====================================');
     const newState = JSON.parse(JSON.stringify(state))
 
     switch(action.type){
